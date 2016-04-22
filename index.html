@@ -25,14 +25,22 @@
     <div id="example"></div>
 
     <script src="js/third-party/threejs/three.js"></script>
+    <script src="js/third-party/threejs/CanvasTexture.js"></script>
     <script src="js/third-party/threejs/StereoEffect.js"></script>
     <script src="js/third-party/threejs/DeviceOrientationControls.js"></script>
     <script src="js/third-party/threejs/OrbitControls.js"></script>
     <script src="js/apis/speech.js"></script>
 
+    <script src="js/renderers/Projector.js"></script>
+    <script src="js/renderers/CanvasRenderer.js"></script>
+    <script src="js/ImprovedNoise.js"></script>
+    <script src="js/terrain.js"></script>
+
 
     <script>
         clock = new THREE.Clock();
+
+        var mesh;
 
         init();
         animate();
@@ -48,46 +56,81 @@
             scene = new THREE.Scene();
 
             camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
-            camera.position.set(0, 10, 0);
+            camera.position.set(10, 30, 0);
             scene.add(camera);
-
 
             controls = new THREE.OrbitControls(camera, element);
             controls.rotateUp(Math.PI / 4);
-            controls.target.set(
-                camera.position.x + 0.1,
-                camera.position.y,
-                camera.position.z
-            );
+            //            controls.target.set( // camera.position.x + 0.1, // camera.position.y, // camera.position.z // );
             controls.noZoom = true;
             controls.noPan = true;
             controls.addEventListener('change', render);
 
+            controls.pan(1, 1);
 
             window.onkeydown = function (e) {
                 var key = e.keyCode ? e.keyCode : e.which;
 
                 if (key == 38) { //up key
-
-                    var originalPos = camera.position;
-                    var newPosX = originalPos.x + 0.1;
-
-                    camera.position.set(newPosX, camera.position.y, camera.position.z);
-
-                    controls.target.set(
-                        newPosX + 0.1,
-                        camera.position.y,
-                        camera.position.z
-                    );
-
-                    console.log(camera);
+                    goForward();
                 } else if (key == 40) { //down key
-                    camera.position.set(camera.position.x + 0.1, camera.position.y, camera.position.z);
-                } else if (key == 40) { //down key
-                    playerSpriteX -= 10;
-                } else if (key == 40) { //down key
-                    playerSpriteX -= 10;
+                    goBack();
+                } else if (key == 39) { //right key
+                    goRight();
+                } else if (key == 37) { //left key
+                    goLeft();
                 }
+            }
+
+            /* terrain */
+            var data = generateHeight(1024, 1024);
+            var texture = new THREE.CanvasTexture(generateTexture(data, 1024, 1024));
+            var material = new THREE.MeshBasicMaterial({
+                map: texture,
+                overdraw: 0.5
+            });
+
+            var quality = 16,
+                step = 1024 / quality;
+
+            var geometry = new THREE.PlaneGeometry(2000, 2000, quality - 1, quality - 1);
+            geometry.rotateX(-Math.PI / 2);
+
+            for (var i = 0, l = geometry.vertices.length; i < l; i++) {
+
+                var x = i % quality,
+                    y = Math.floor(i / quality);
+                geometry.vertices[i].y = data[(x * step) + (y * step) * 1024] * 2 - 128;
+
+            }
+
+            mesh = new THREE.Mesh(geometry, material);
+
+            scene.add(mesh);
+
+            function goForward() {
+                var originalPos = camera.position;
+                var newPosX = originalPos.x - 0.1;
+
+                camera.position.set(newPosX, camera.position.y, camera.position.z);
+
+                controls.target.set(
+                    newPosX - 0.1,
+                    originalPos.y,
+                    originalPos.z
+                );
+            }
+
+            function goBack() {
+
+            }
+
+            function goLeft() {
+                controls.pan(1, 0);
+            }
+
+            function goRight() {
+                controls.pan(-1, 0);
             }
 
             function setOrientationControls(e) {
@@ -108,27 +151,27 @@
             var light = new THREE.HemisphereLight(0x777777, 0x000000, 0.6);
             scene.add(light);
 
-            var texture = THREE.ImageUtils.loadTexture(
-                'textures/patterns/wood-plastered-red.png'
-            );
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat = new THREE.Vector2(50, 50);
-            texture.anisotropy = renderer.getMaxAnisotropy();
-
-            var material = new THREE.MeshPhongMaterial({
-                color: 0xffffff,
-                specular: 0xffffff,
-                shininess: 20,
-                shading: THREE.FlatShading,
-                map: texture
-            });
-
-            var geometry = new THREE.PlaneGeometry(1000, 1000);
-
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.rotation.x = -Math.PI / 2;
-            scene.add(mesh);
+            //            var texture = THREE.ImageUtils.loadTexture(
+            //                'textures/patterns/wood-plastered-red.png'
+            //            );
+            //            texture.wrapS = THREE.RepeatWrapping;
+            //            texture.wrapT = THREE.RepeatWrapping;
+            //            texture.repeat = new THREE.Vector2(50, 50);
+            //            texture.anisotropy = renderer.getMaxAnisotropy();
+            //
+            //            var material = new THREE.MeshPhongMaterial({
+            //                color: 0xffffff,
+            //                specular: 0xffffff,
+            //                shininess: 20,
+            //                shading: THREE.FlatShading,
+            //                map: texture
+            //            });
+            //
+            //            var geometry = new THREE.PlaneGeometry(1000, 1000);
+            //
+            //            var mesh = new THREE.Mesh(geometry, material);
+            //            mesh.rotation.x = -Math.PI / 2;
+            //            scene.add(mesh);
 
             window.addEventListener('resize', resize, false);
             setTimeout(resize, 1);
