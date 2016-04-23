@@ -61,6 +61,7 @@
     <script src="js/renderers/CanvasRenderer.js"></script>
     <script src="js/ImprovedNoise.js"></script>
     <script src="js/terrain.js"></script>
+    <script src="js/renderers/SceneObjects.js"></script>
 
     <div id="blocker">
 
@@ -325,7 +326,7 @@
             effect = new THREE.StereoEffect(renderer);
 
             //
-
+            initMesh(scene);
             window.addEventListener('resize', onWindowResize, false);
             onWindowResize();
         }
