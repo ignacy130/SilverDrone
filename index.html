@@ -262,7 +262,7 @@
 
                 //alert('keyup');
                 var shouldstop = function(char){
-                    return  (keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
+                    return  !(keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
                 }
                 switch (event.keyCode) {
 
