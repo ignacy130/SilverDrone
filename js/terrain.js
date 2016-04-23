@@ -50,7 +50,7 @@ var TerrainHelper = {
         var texture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set( 100, 100 );
+        texture.repeat.set( 12,12 );
 
         var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
         material.color.setHSL( 0.095, 1, 0.75 );
