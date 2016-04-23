@@ -90,15 +90,12 @@
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-    alert('Pointerlock'+JSON.stringify(havePointerLock))
+
     if (havePointerLock) {
 
         var element = document.body;
 
         var pointerlockchange = function (event) {
-            alert("pointer lock change");
-            alert("body"+JSON.stringify(document.body));
-            alert("webkitPointerLockElement"+JSON.stringify(document.webkitPointerLockElement));
             if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 
                 controlsEnabled = true;
@@ -121,11 +118,7 @@
         };
 
 
-
-
-
         var pointerlockerror = function (event) {
-            alert("pointer lck error" + JSON.stringify(event))
             instructions.style.display = '';
 
         };
@@ -225,8 +218,25 @@
 
         scene.add(TerrainHelper.getTerrain());
 
+        initKeys();
+
+        raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0xff6f1f);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        effect = new THREE.StereoEffect(renderer);
+
+        //
+        initMesh(scene);
+        window.addEventListener('resize', onWindowResize, false);
+        onWindowResize();
+    }
+
+    function initKeys(){
         var onKeyDown = function (event) {
-            //alert('keydown '+event.keyCode);
             switch (event.keyCode) {
 
                 case 38: // up
@@ -259,8 +269,6 @@
         };
 
         var onKeyUp = function (event) {
-            //alert('keyup '+event.keyCode);
-
 
             var kup = function(){
                 switch (event.keyCode) {
@@ -293,20 +301,6 @@
 
         document.addEventListener('keydown', onKeyDown, false);
         document.addEventListener('keyup', onKeyUp, false);
-
-        raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
-
-        renderer = new THREE.WebGLRenderer();
-        renderer.setClearColor(0xff6f1f);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-        effect = new THREE.StereoEffect(renderer);
-
-        //
-        initMesh(scene);
-        window.addEventListener('resize', onWindowResize, false);
-        onWindowResize();
     }
 
     function onWindowResize() {
@@ -324,78 +318,56 @@
         requestAnimationFrame(animate);
         controlsEnabled = true;
         try{
-        if (controlsEnabled) {
-            raycaster.ray.origin.copy(controls.getObject().position);
-            raycaster.ray.origin.y -= 10;
+            if (controlsEnabled) {
+                raycaster.ray.origin.copy(controls.getObject().position);
+                raycaster.ray.origin.y -= 10;
 
-            var intersections = raycaster.intersectObjects(objects);
+                var intersections = raycaster.intersectObjects(objects);
 
-            var isOnObject = intersections.length > 0;
+                var isOnObject = intersections.length > 0;
 
-            alert('animate contrls enabled');
-            var time = performance.now();
-            alert('delta' + (time - prevTime) / 1000);
-            var delta = (time - prevTime) / 1000;
+                var time = performance.now();
+                var delta = (time - prevTime) / 1000;
 
-            velocity.x -= velocity.x * 10.0 * delta;
-            velocity.z -= velocity.z * 10.0 * delta;
+                velocity.x -= velocity.x * 10.0 * delta;
+                velocity.z -= velocity.z * 10.0 * delta;
 
-            velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+                velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-            if (moveForward) velocity.z -= 400.0 * delta;
-            if (moveBackward) velocity.z += 400.0 * delta;
+                if (moveForward) velocity.z -= 400.0 * delta;
+                if (moveBackward) velocity.z += 400.0 * delta;
 
-            if (moveLeft) velocity.x -= 400.0 * delta;
-            if (moveRight) velocity.x += 400.0 * delta;
+                if (moveLeft) velocity.x -= 400.0 * delta;
+                if (moveRight) velocity.x += 400.0 * delta;
 
-            if (isOnObject === true) {
-                velocity.y = Math.max(0, velocity.y);
+                if (isOnObject === true) {
+                    velocity.y = Math.max(0, velocity.y);
 
-                canJump = true;
+                    canJump = true;
+                }
+
+                controls.getObject().translateX(velocity.x * delta);
+                controls.getObject().translateY(velocity.y * delta);
+                controls.getObject().translateZ(velocity.z * delta);
+
+                if (controls.getObject().position.y < 10) {
+
+                    velocity.y = 0;
+                    controls.getObject().position.y = 10;
+
+                    canJump = true;
+
+                }
+
+                prevTime = time;
+            } else {
+
             }
-
-            controls.getObject().translateX(velocity.x * delta);
-            controls.getObject().translateY(velocity.y * delta);
-            controls.getObject().translateZ(velocity.z * delta);
-
-            if (controls.getObject().position.y < 10) {
-
-                velocity.y = 0;
-                controls.getObject().position.y = 10;
-
-                canJump = true;
-
-            }
-
-            prevTime = time;
-        } else {
-            alert(controlsEnabled);
-        }
-
-
-        var bgTexture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
-        bgTexture.wrapS = THREE.RepeatWrapping;
-        bgTexture.wrapT = THREE.RepeatWrapping;
-        bgTexture.repeat.set( 4, 4 );
-        var bg = new THREE.Mesh(
-                new THREE.PlaneGeometry(2, 2, 0),
-                new THREE.MeshBasicMaterial({map: bgTexture})
-        );
-
-        // The bg plane shouldn't care about the z-buffer.
-        bg.material.depthTest = false;
-        bg.material.depthWrite = false;
-
-        var bgScene = new THREE.Scene();
-        var bgCam = new THREE.Camera();
-        bgScene.add(bgCam);
-        bgScene.add(bg);
-
-
-        renderer.render(scene, camera);
-        effect.render(scene, camera);
-        }catch(e){
-            alert(JSON.stringify(e));
+            
+            renderer.render(scene, camera);
+            effect.render(scene, camera);
+        } catch(e) {
+            //alert("catch="+JSON.stringify(e.message));
         }
     }
 </script>
