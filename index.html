@@ -78,7 +78,7 @@
     <script>
         var camera, scene, renderer;
         var geometry, material, mesh;
-        var controls;
+        var controls,container;
 
         var objects = [];
 
@@ -209,7 +209,7 @@
             controls = new THREE.PointerLockControls(camera);
 
             scene.add(controls.getObject());
-
+            container = document.body;
             function setOrientationControls(e) {
                 if (!e.alpha) {
                     return;
@@ -264,7 +264,7 @@
                     /*var shouldstop = function (char) {
                         return true;//return  !(keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
                     }*/
-                    alert(event.keyCode);
+                    //alert(event.keyCode);
                     switch (event.keyCode) {
 
                         case 38: // up
@@ -299,7 +299,7 @@
             };
 
             document.addEventListener('keydown', onKeyDown, false);
-            //document.addEventListener('keyup', onKeyUp, false);
+            document.addEventListener('keyup', onKeyUp, false);
 
             raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
 
