@@ -223,7 +223,7 @@
         scene.add(TerrainHelper.getTerrain());
 
         var onKeyDown = function (event) {
-
+            controlsEnabled = true;
             switch (event.keyCode) {
 
                 case 38: // up
@@ -257,29 +257,33 @@
 
         var onKeyUp = function (event) {
 
-            switch (event.keyCode) {
 
-                case 38: // up
-                case 87: // w
-                    moveForward = false;
-                    break;
+            var kup = function(){
+                switch (event.keyCode) {
 
-                case 37: // left
-                case 65: // a
-                    moveLeft = false;
-                    break;
+                    case 38: // up
+                    case 87: // w
+                        moveForward = false;
+                        break;
 
-                case 40: // down
-                case 83: // s
-                    moveBackward = false;
-                    break;
+                    case 37: // left
+                    case 65: // a
+                        moveLeft = false;
+                        break;
 
-                case 39: // right
-                case 68: // d
-                    moveRight = false;
-                    break;
+                    case 40: // down
+                    case 83: // s
+                        moveBackward = false;
+                        break;
 
+                    case 39: // right
+                    case 68: // d
+                        moveRight = false;
+                        break;
+
+                }
             }
+            setTimeout(function(){kup(); }, 1000);
 
         };
 
@@ -315,6 +319,7 @@
 
         requestAnimationFrame(animate);
 
+        try{
         if (controlsEnabled) {
             raycaster.ray.origin.copy(controls.getObject().position);
             raycaster.ray.origin.y -= 10;
@@ -357,11 +362,10 @@
             }
 
             prevTime = time;
-
         }
 
 
-        var bgTexture = new THREE.TextureLoader().load( "textures/water.jpg" );
+        var bgTexture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
         bgTexture.wrapS = THREE.RepeatWrapping;
         bgTexture.wrapT = THREE.RepeatWrapping;
         bgTexture.repeat.set( 4, 4 );
@@ -382,7 +386,9 @@
 
         renderer.render(scene, camera);
         effect.render(scene, camera);
-
+        }catch(e){
+            alert(JSON.stringify(e));
+        }
     }
 </script>
 </body>
