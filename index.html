@@ -96,6 +96,7 @@
         if (havePointerLock) {
 
             var element = document.body;
+            alert('has pointerslock');
             var pointerlockchange = function (event) {
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 
@@ -392,10 +393,6 @@
             } else if (container.webkitRequestFullscreen) {
                 container.webkitRequestFullscreen();
             }
-
-
-            renderer.render(scene, camera);
-            effect.render(scene, camera);
         }
     </script>
 </body>
