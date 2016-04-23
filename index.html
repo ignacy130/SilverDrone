@@ -22,6 +22,8 @@
 <script src="js/terrain.js"></script>
 <script src="js/renderers/SceneObjects.js"></script>
 
+<div id="dust-storm"></div>
+
 <div id="hud">
     <div id="hud-basic">
         <span>
@@ -50,6 +52,8 @@
 <div id="hud2">
 
 </div>
+
+
 
 <div id="blocker">
 
@@ -97,6 +101,8 @@
     var camera, scene, renderer, hemiLight, dirLight, mixers;
     var geometry, material, mesh;
     var controls;
+
+    var dustStorm = document.getElementById("dust-storm");
 
     var objects = [];
 
@@ -221,7 +227,7 @@
         camera.position.set( 0, 10, 250 );
 
         scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xdbbee, 0, 1050);
+        scene.fog = new THREE.Fog(0xdbbee, 1000, 1050);
         scene.fog.color.setRGB( 0.9, 0.8, 0.8 );
         // LIGHTS
 
@@ -397,6 +403,8 @@
 
         window.addEventListener('resize', onWindowResize, false);
         onWindowResize();
+
+        beginStorm();
     }
 
     function onWindowResize() {
@@ -407,6 +415,27 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         effect.setSize(window.innerWidth, window.innerHeight);
 
+    }
+
+    function beginStorm() {
+        var aWhile = 50; // ms
+        dustStorm.style.zIndex = 10;
+        var increaseFog = function() {
+
+            if(Number(dustStorm.style.opacity)<0.8) {
+                dustStorm.style.opacity = Number(dustStorm.style.opacity) + 0.01;
+            }
+
+            scene.fog.near = scene.fog.near-10;
+            scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
+            if(scene.fog.near > 10) {
+                setTimeout(increaseFog, aWhile);
+            }
+            else{
+                console.log("fog done");
+            }
+        };
+        increaseFog();
     }
 
     function animate() {
