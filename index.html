@@ -56,7 +56,8 @@
     <script src="js/third-party/threejs/DeviceOrientationControls.js"></script>
     <script src="js/third-party/threejs/PointerLockControls.js"></script>
     <script src="js/third-party/threejs/OrbitControls.js"></script>
-    <script src="js/third-party/threejs/SkyShader.js"></script>
+    <script src="js/third-party/threex.keyboardstate.js"></script>
+	<script src="js/third-party/threejs/SkyShader.js"></script>
     <script src="js/third-party/threejs/dat.gui.min.js"></script>
     <!--<script src="js/apis/speech.js"></script>-->
 
@@ -78,7 +79,7 @@
     <script>
         var camera, scene, renderer;
         var geometry, material, mesh;
-        var controls;
+        var controls,container;
 
         var objects = [];
 
@@ -106,6 +107,7 @@
 
                 } else {
 
+                    //alert('pointers failed');
                     controls.enabled = false;
 
                     blocker.style.display = '-webkit-box';
@@ -192,6 +194,7 @@
 
         var prevTime = performance.now();
         var velocity = new THREE.Vector3();
+        //var keyboard    = new THREEx.KeyboardState();
 
         function init() {
 
@@ -200,13 +203,14 @@
             scene = new THREE.Scene();
             scene.fog = new THREE.Fog(0xffb966, 0, 750);
 
-            var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
+            var light = new THREE.HemisphereLight(0xeeffff, 0x777788, 0.75);
             light.position.set(0.5, 1, 0.75);
             scene.add(light);
 
             controls = new THREE.PointerLockControls(camera);
 
             scene.add(controls.getObject());
+            container = document.body;
 
             function setOrientationControls(e) {
                 if (!e.alpha) {
@@ -220,14 +224,12 @@
 
                 window.removeEventListener('deviceorientation', setOrientationControls, true);
             }
-            window.addEventListener('deviceorientation', setOrientationControls, true);
+            //window.addEventListener('deviceorientation', setOrientationControls, true);
 
-            TerrainHelper.setUp(scene);
+            scene.add(TerrainHelper.getTerrain());
 
             var onKeyDown = function (event) {
-
                 switch (event.keyCode) {
-
                 case 38: // up
                 case 87: // w
                     moveForward = true;
@@ -259,29 +261,42 @@
 
             var onKeyUp = function (event) {
 
-                switch (event.keyCode) {
+                var evaluation = function() {
+                    //alert('keyup');
+                    /*var shouldstop = function (char) {
+                        return true;//return  !(keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
+                    }*/
+                    //alert(event.keyCode);
+                    switch (event.keyCode) {
 
-                case 38: // up
-                case 87: // w
-                    moveForward = false;
-                    break;
+                        case 38: // up
+                        case 87: // w
+                            //if (shouldstop('w'))
+                                moveForward = false;
+                            break;
 
-                case 37: // left
-                case 65: // a
-                    moveLeft = false;
-                    break;
+                        case 37: // left
+                        case 65: // a
+                            //if (shouldstop('a'))
+                                moveLeft = false;
+                            break;
 
-                case 40: // down
-                case 83: // s
-                    moveBackward = false;
-                    break;
+                        case 40: // down
+                        case 83: // s
+                            //if (shouldstop('s'))
+                                moveBackward = false;
+                            break;
 
-                case 39: // right
-                case 68: // d
-                    moveRight = false;
-                    break;
+                        case 39: // right
+                        case 68: // d
+                            //if (shouldstop('d'))
+                                moveRight = false;
+                            break;
 
+                    }
                 }
+
+                window.setTimeout(evaluation, 1000);
 
             };
 
@@ -297,7 +312,6 @@
             document.body.appendChild(renderer.domElement);
             effect = new THREE.StereoEffect(renderer);
 
-            //
             initMesh(scene);
             window.addEventListener('resize', onWindowResize, false);
             onWindowResize();
@@ -312,12 +326,12 @@
             effect.setSize(window.innerWidth, window.innerHeight);
 
         }
-
         function animate() {
 
             requestAnimationFrame(animate);
 
             if (controlsEnabled) {
+                //alert("animate time");
                 raycaster.ray.origin.copy(controls.getObject().position);
                 raycaster.ray.origin.y -= 10;
 
@@ -345,6 +359,7 @@
                     canJump = true;
                 }
 
+
                 controls.getObject().translateX(velocity.x * delta);
                 controls.getObject().translateY(velocity.y * delta);
                 controls.getObject().translateZ(velocity.z * delta);
@@ -365,6 +380,18 @@
             renderer.render(scene, camera);
             effect.render(scene, camera);
 
+        }
+
+        function fullscreen() {
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            } else if (container.mozRequestFullScreen) {
+                container.mozRequestFullScreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            }
         }
     </script>
 </body>

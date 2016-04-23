@@ -4,11 +4,19 @@
 var mesh = null;
 function initMesh(scene) {
     var loader = new THREE.JSONLoader();
-    loader.load('./models/station_concept_plus90.json', function(geometry) {
+    loader.load('./models/station_concept_sizex15.json', function(geometry) {
         mesh = new THREE.Mesh(geometry);
-        mesh.rotateZ( Math.PI / 2);
+        mesh.rotateX( Math.PI / 2);
         mesh.material.color.setHex( 0xffffff );
-        mesh.position.x = 150;
+        mesh.position.x = 350;
+        mesh.position.y = -35;
+        mesh.scale.x = 4;
+        mesh.scale.y = 4;
+        mesh.scale.z = 4;
         scene.add(mesh);
+
+        var m2 = mesh.clone();
+        m2.position.z = 150;
+        scene.add(m2);
     });
 }
