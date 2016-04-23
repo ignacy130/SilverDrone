@@ -181,7 +181,6 @@
         }
 
         init();
-        animate();
 
         var controlsEnabled = false;
 
@@ -383,6 +382,22 @@
 
         }
 
+        function fullscreen() {
+/*
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            } else if (container.mozRequestFullScreen) {
+                container.mozRequestFullScreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            }
+            onWindowResize();
+
+            renderer.render(scene, camera);
+            effect.render(scene, camera);*/
+        }
     </script>
 </body>
 
