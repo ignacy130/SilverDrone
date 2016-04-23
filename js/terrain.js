@@ -10,7 +10,7 @@ var TerrainHelper = {
             for (var i = 0; i < size; i++) {
                 var x = i % width,
                     y = ~~(i / width);
-                data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * 0.5) * quality + 10;
+                data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * 0.05) * quality + 10;
             }
         }
         return data;
