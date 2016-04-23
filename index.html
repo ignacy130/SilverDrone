@@ -47,6 +47,10 @@
     </div>
 </div>
 
+<div id="hud2">
+
+</div>
+
 <div id="blocker">
 
     <div id="instructions">
@@ -106,6 +110,10 @@
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+    var hud = document.getElementById('hud');
+    var hud2 = document.getElementById('hud2');
+    hud2.innerHTML = hud.innerHTML;
 
     if (havePointerLock) {
 
