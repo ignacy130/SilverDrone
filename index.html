@@ -182,7 +182,6 @@
         }
 
         init();
-        animate();
 
         var controlsEnabled = false;
 
@@ -224,7 +223,7 @@
 
                 window.removeEventListener('deviceorientation', setOrientationControls, true);
             }
-            //window.addEventListener('deviceorientation', setOrientationControls, true);
+            window.addEventListener('deviceorientation', setOrientationControls, true);
 
             scene.add(TerrainHelper.getTerrain());
 
@@ -315,6 +314,8 @@
             initMesh(scene);
             window.addEventListener('resize', onWindowResize, false);
             onWindowResize();
+            animate();
+
         }
 
         function onWindowResize() {
