@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -101,6 +101,7 @@
     var camera, scene, renderer, hemiLight, dirLight, mixers;
     var geometry, material, mesh;
     var controls;
+    var audioLoader;
 
     var dustStorm = document.getElementById("dust-storm");
 
@@ -389,6 +390,32 @@
         document.addEventListener('keyup', onKeyUp, false);
     }
 
+    function soundInit(){
+        var listener = new THREE.AudioListener();
+        camera.add( listener );
+
+        var soundGlobal = new THREE.Audio( listener );
+        audioLoader.load( 'res/sounds/wind.mp3', function( buffer ) {
+            soundGlobal.setBuffer( buffer );
+            soundGlobal.setLoop(true);
+            soundGlobal.setVolume(0.5);
+            soundGlobal.play();
+        });
+    }
+
+    function playSound(path){
+        var listener = new THREE.AudioListener();
+        camera.add( listener );
+        
+        var sound = new THREE.Audio( listener );
+        audioLoader.load( path, function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop(true);
+            sound.setVolume(0.5);
+            sound.play();
+        });
+    }
+
     function init() {
 
         initializeWorld();
@@ -396,6 +423,8 @@
         initializeControls();
 
         initKeys();
+
+        soundInit();
 
         scene.add(TerrainHelper.getTerrain());
 
