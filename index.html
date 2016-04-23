@@ -129,7 +129,6 @@
             instructions.style.display = '';
 
         };
-        pointerlockchange();
         // Hook pointer lock state change events
         document.addEventListener('pointerlockchange', pointerlockchange, false);
         document.addEventListener('mozpointerlockchange', pointerlockchange, false);
@@ -323,7 +322,7 @@
     function animate() {
 
         requestAnimationFrame(animate);
-
+        controlsEnabled = true;
         try{
         if (controlsEnabled) {
             raycaster.ray.origin.copy(controls.getObject().position);
