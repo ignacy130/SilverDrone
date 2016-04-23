@@ -31,8 +31,7 @@ function getMarsBase(scene) {
             mesh.rotateX(rotateX);
             mesh.rotateY(rotateY);
             mesh.rotateZ(rotateZ);
-            var colorMaterial = material
-            mesh.material = colorMaterial;
+            mesh.material = material;
             mesh.position.x = x;
             mesh.position.y = y;
             mesh.position.z = z;
@@ -43,8 +42,21 @@ function getMarsBase(scene) {
         });
     }
 
+
+
     loadBases();
-    loadObject('./models/gwiazdozbiory_x15.json',
-                new THREE.MeshLambertMaterial({color: 0xff0000, side: THREE.DoubleSide}),
-                0,0,0,3,3,3,Math.PI / 2,0,0)
+
+    var customMaterial = new THREE.ShaderMaterial(
+        {
+            uniforms: {  },
+            vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+            side: THREE.BackSide,
+            blending: THREE.AdditiveBlending,
+            transparent: true
+        }   );
+
+    loadObject('./models/swiecacakulka.json',
+                new THREE.MeshLambertMaterial({color: 0xffffff, side: THREE.DoubleSide}),
+                150,3000,150,1,1,1,Math.PI / 2,0,0)
 }
