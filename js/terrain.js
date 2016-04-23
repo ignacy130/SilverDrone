@@ -54,6 +54,7 @@ var TerrainHelper = {
 
         var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
         material.color.setHSL( 0.095, 1, 0.75 );
+        material.map = texture;
 
         var quality = 16,
             step = 1024 / quality;
