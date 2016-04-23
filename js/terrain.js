@@ -44,11 +44,14 @@ var TerrainHelper = {
         return canvas;
     },
 
-    setUp: function (scene) {
+    getTerrain: function (scene) {
         /* terrain */
-        var sceneRef = scene;
         var data = this.generateHeight(1024, 1024);
-        var texture = new THREE.CanvasTexture(this.generateTexture(data, 1024, 1024));
+        var texture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 100, 100 );
+        console.log(texture);
         var material = new THREE.MeshBasicMaterial({
             map: texture,
             overdraw: 0.5
@@ -64,6 +67,6 @@ var TerrainHelper = {
             geometry.vertices[i].y = data[(x * step) + (y * step) * 1024] * 2 - 128;
         }
         mesh = new THREE.Mesh(geometry, material);
-        sceneRef.add(mesh);
+        return mesh;
     }
 };

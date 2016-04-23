@@ -57,7 +57,8 @@
     <script src="js/third-party/threejs/PointerLockControls.js"></script>
     <script src="js/third-party/threejs/OrbitControls.js"></script>
     <script src="js/third-party/threex.keyboardstate.js"></script>
-
+	<script src="js/third-party/threejs/SkyShader.js"></script>
+    <script src="js/third-party/threejs/dat.gui.min.js"></script>
     <!--<script src="js/apis/speech.js"></script>-->
 
     <script src="js/renderers/Projector.js"></script>
@@ -201,7 +202,7 @@
             scene = new THREE.Scene();
             scene.fog = new THREE.Fog(0xffb966, 0, 750);
 
-            var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
+            var light = new THREE.HemisphereLight(0xeeffff, 0x777788, 0.75);
             light.position.set(0.5, 1, 0.75);
             scene.add(light);
 
@@ -209,6 +210,7 @@
 
             scene.add(controls.getObject());
             container = document.body;
+
             function setOrientationControls(e) {
                 if (!e.alpha) {
                     return;
@@ -223,7 +225,7 @@
             }
             window.addEventListener('deviceorientation', setOrientationControls, true);
 
-            TerrainHelper.setUp(scene);
+            scene.add(TerrainHelper.getTerrain());
 
             var onKeyDown = function (event) {
                 switch (event.keyCode) {
@@ -309,7 +311,6 @@
             document.body.appendChild(renderer.domElement);
             effect = new THREE.StereoEffect(renderer);
 
-            //
             initMesh(scene);
             window.addEventListener('resize', onWindowResize, false);
             onWindowResize();
@@ -376,26 +377,6 @@
                 prevTime = time;
 
             }
-
-
-            var bgTexture = new THREE.TextureLoader().load( "textures/water.jpg" );
-            bgTexture.wrapS = THREE.RepeatWrapping;
-            bgTexture.wrapT = THREE.RepeatWrapping;
-            bgTexture.repeat.set( 4, 4 );
-            var bg = new THREE.Mesh(
-                    new THREE.PlaneGeometry(2, 2, 0),
-                    new THREE.MeshBasicMaterial({map: bgTexture})
-            );
-
-            // The bg plane shouldn't care about the z-buffer.
-            bg.material.depthTest = false;
-            bg.material.depthWrite = false;
-
-            var bgScene = new THREE.Scene();
-            var bgCam = new THREE.Camera();
-            bgScene.add(bgCam);
-            bgScene.add(bg);
-
 
             renderer.render(scene, camera);
             effect.render(scene, camera);
