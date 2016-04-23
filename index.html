@@ -223,7 +223,7 @@
         scene.add(TerrainHelper.getTerrain());
 
         var onKeyDown = function (event) {
-
+            controlsEnabled = true;
             switch (event.keyCode) {
 
                 case 38: // up
@@ -319,6 +319,7 @@
 
         requestAnimationFrame(animate);
 
+
         if (controlsEnabled) {
             raycaster.ray.origin.copy(controls.getObject().position);
             raycaster.ray.origin.y -= 10;
@@ -361,11 +362,10 @@
             }
 
             prevTime = time;
-
         }
 
 
-        var bgTexture = new THREE.TextureLoader().load( "textures/water.jpg" );
+        var bgTexture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
         bgTexture.wrapS = THREE.RepeatWrapping;
         bgTexture.wrapT = THREE.RepeatWrapping;
         bgTexture.repeat.set( 4, 4 );
