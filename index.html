@@ -223,6 +223,7 @@
         scene.add(TerrainHelper.getTerrain());
 
         var onKeyDown = function (event) {
+            alert('keydown '+event.keyCode);
             switch (event.keyCode) {
 
                 case 38: // up
@@ -255,6 +256,7 @@
         };
 
         var onKeyUp = function (event) {
+            alert('keyup '+event.keyCode);
 
 
             var kup = function(){
