@@ -331,6 +331,7 @@
             requestAnimationFrame(animate);
 
             if (controlsEnabled) {
+                alert("animate time");
                 raycaster.ray.origin.copy(controls.getObject().position);
                 raycaster.ray.origin.y -= 10;
 
@@ -357,6 +358,8 @@
 
                     canJump = true;
                 }
+
+                alert(moveForward + ' '+ velocity.z);
 
                 controls.getObject().translateX(velocity.x * delta);
                 controls.getObject().translateY(velocity.y * delta);
