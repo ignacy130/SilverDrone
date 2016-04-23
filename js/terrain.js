@@ -44,7 +44,7 @@ var TerrainHelper = {
         return canvas;
     },
 
-    getTerrain: function (scene) {
+    getTerrain: function () {
         /* terrain */
         var data = this.generateHeight(1024, 1024);
         var texture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
