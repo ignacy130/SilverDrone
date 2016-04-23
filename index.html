@@ -319,7 +319,7 @@
 
         requestAnimationFrame(animate);
 
-
+        try{
         if (controlsEnabled) {
             raycaster.ray.origin.copy(controls.getObject().position);
             raycaster.ray.origin.y -= 10;
@@ -386,7 +386,9 @@
 
         renderer.render(scene, camera);
         effect.render(scene, camera);
-
+        }catch(e){
+            alert(JSON.stringify(e));
+        }
     }
 </script>
 </body>
