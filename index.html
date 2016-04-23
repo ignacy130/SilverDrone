@@ -383,6 +383,7 @@
         }
 
         function fullscreen() {
+
             if (container.requestFullscreen) {
                 container.requestFullscreen();
             } else if (container.msRequestFullscreen) {
@@ -392,7 +393,7 @@
             } else if (container.webkitRequestFullscreen) {
                 container.webkitRequestFullscreen();
             }
-
+            onWindowResize();
 
             renderer.render(scene, camera);
             effect.render(scene, camera);
