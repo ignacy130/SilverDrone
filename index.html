@@ -165,6 +165,9 @@
 
             }
 
+            //alert(JSON.stringify(document.body.childNodes));
+            document.body.childNodes[document.body.childNodes.length-1].requestFullscreen();
+
         }, false);
 
     } else {
@@ -175,6 +178,8 @@
 
     init();
     animate();
+
+
 
     var moveForward = false;
     var moveBackward = false;
@@ -307,6 +312,7 @@
 
         window.addEventListener('resize', onWindowResize, false);
         onWindowResize();
+
     }
 
     function onWindowResize() {
@@ -376,7 +382,6 @@
         }
     }
 
-    window.scrollTo(0,1);
 </script>
 </body>
 
