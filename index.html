@@ -84,6 +84,7 @@
 
         var blocker = document.getElementById('blocker');
         var instructions = document.getElementById('instructions');
+        var effects;
 
         // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -343,11 +344,12 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
+            effect = new THREE.StereoEffect(renderer);
 
             //
 
             window.addEventListener('resize', onWindowResize, false);
-
+            onWindowResize();
         }
 
         function onWindowResize() {
@@ -356,6 +358,7 @@
             camera.updateProjectionMatrix();
 
             renderer.setSize(window.innerWidth, window.innerHeight);
+            effect.setSize(window.innerWidth, window.innerHeight);
 
         }
 
@@ -407,8 +410,8 @@
                 prevTime = time;
 
             }
-
             renderer.render(scene, camera);
+            effect.render(scene, camera);
 
         }
     </script>
