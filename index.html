@@ -86,10 +86,11 @@
     var instructions = document.getElementById('instructions');
     var effects;
 
+    var controlsEnabled = false;
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-    //alert('Pointerlock'+JSON.stringify(havePointerLock))
+    alert('Pointerlock'+JSON.stringify(havePointerLock))
     if (havePointerLock) {
 
         var element = document.body;
@@ -180,7 +181,7 @@
     init();
     animate();
 
-    var controlsEnabled = false;
+
 
     var moveForward = false;
     var moveBackward = false;
@@ -365,6 +366,8 @@
             }
 
             prevTime = time;
+        } else {
+            alert(controlsEnabled);
         }
 
 
