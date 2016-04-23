@@ -226,9 +226,7 @@
             TerrainHelper.setUp(scene);
 
             var onKeyDown = function (event) {
-                //alert('keydown');
                 switch (event.keyCode) {
-
                 case 38: // up
                 case 87: // w
                     moveForward = true;
@@ -262,9 +260,10 @@
 
                 var evaluation = function() {
                     //alert('keyup');
-                    var shouldstop = function (char) {
+                    /*var shouldstop = function (char) {
                         return true;//return  !(keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
-                    }
+                    }*/
+                    alert(event.keyCode);
                     switch (event.keyCode) {
 
                         case 38: // up
