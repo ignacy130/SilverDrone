@@ -106,7 +106,7 @@
 
                 } else {
 
-                    alert('pointers failed');
+                    //alert('pointers failed');
                     controls.enabled = false;
 
                     blocker.style.display = '-webkit-box';
@@ -325,7 +325,6 @@
             effect.setSize(window.innerWidth, window.innerHeight);
 
         }
-
         function animate() {
 
             requestAnimationFrame(animate);
@@ -359,7 +358,6 @@
                     canJump = true;
                 }
 
-                alert(moveForward + ' '+ velocity.z);
 
                 controls.getObject().translateX(velocity.x * delta);
                 controls.getObject().translateY(velocity.y * delta);
