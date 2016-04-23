@@ -223,7 +223,7 @@
             TerrainHelper.setUp(scene);
 
             var onKeyDown = function (event) {
-
+                alert('keydown');
                 switch (event.keyCode) {
 
                 case 38: // up
@@ -256,7 +256,7 @@
             };
 
             var onKeyUp = function (event) {
-                alert(event.keyCode);
+                alert('keyup');
                 switch (event.keyCode) {
 
                 case 38: // up
