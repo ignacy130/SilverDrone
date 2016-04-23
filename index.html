@@ -166,7 +166,11 @@
             }
 
             //alert(JSON.stringify(document.body.childNodes));
+            try{
             document.body.childNodes[document.body.childNodes.length-1].requestFullscreen();
+            document.body.childNodes[document.body.childNodes.length-1].webkitRequestFullscreen();
+            }catch(e)
+            {}
 
         }, false);
 
