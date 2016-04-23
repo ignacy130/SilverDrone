@@ -393,7 +393,7 @@
     function soundInit(){
         var listener = new THREE.AudioListener();
         camera.add( listener );
-
+        audioLoader = new THREE.AudioLoader();
         var soundGlobal = new THREE.Audio( listener );
         audioLoader.load( 'res/sounds/wind.mp3', function( buffer ) {
             soundGlobal.setBuffer( buffer );
