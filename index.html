@@ -56,6 +56,8 @@
     <script src="js/third-party/threejs/DeviceOrientationControls.js"></script>
     <script src="js/third-party/threejs/PointerLockControls.js"></script>
     <script src="js/third-party/threejs/OrbitControls.js"></script>
+    <script src="js/third-party/threejs/SkyShader.js"></script>
+    <script src="js/third-party/threejs/dat.gui.min.js"></script>
     <!--<script src="js/apis/speech.js"></script>-->
 
     <script src="js/renderers/Projector.js"></script>
@@ -359,26 +361,6 @@
                 prevTime = time;
 
             }
-
-
-            var bgTexture = new THREE.TextureLoader().load( "textures/water.jpg" );
-            bgTexture.wrapS = THREE.RepeatWrapping;
-            bgTexture.wrapT = THREE.RepeatWrapping;
-            bgTexture.repeat.set( 4, 4 );
-            var bg = new THREE.Mesh(
-                    new THREE.PlaneGeometry(2, 2, 0),
-                    new THREE.MeshBasicMaterial({map: bgTexture})
-            );
-
-            // The bg plane shouldn't care about the z-buffer.
-            bg.material.depthTest = false;
-            bg.material.depthWrite = false;
-
-            var bgScene = new THREE.Scene();
-            var bgCam = new THREE.Camera();
-            bgScene.add(bgCam);
-            bgScene.add(bg);
-
 
             renderer.render(scene, camera);
             effect.render(scene, camera);
