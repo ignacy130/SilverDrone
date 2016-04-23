@@ -260,36 +260,41 @@
 
             var onKeyUp = function (event) {
 
-                //alert('keyup');
-                var shouldstop = function(char){
-                    return  !(keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
+                var evaluation = function() {
+                    //alert('keyup');
+                    var shouldstop = function (char) {
+                        return true;//return  !(keyboard.pressed(char.toUpperCase()) || keyboard.pressed(char));
+                    }
+                    switch (event.keyCode) {
+
+                        case 38: // up
+                        case 87: // w
+                            //if (shouldstop('w'))
+                                moveForward = false;
+                            break;
+
+                        case 37: // left
+                        case 65: // a
+                            //if (shouldstop('a'))
+                                moveLeft = false;
+                            break;
+
+                        case 40: // down
+                        case 83: // s
+                            //if (shouldstop('s'))
+                                moveBackward = false;
+                            break;
+
+                        case 39: // right
+                        case 68: // d
+                            //if (shouldstop('d'))
+                                moveRight = false;
+                            break;
+
+                    }
                 }
-                switch (event.keyCode) {
 
-                case 38: // up
-                case 87: // w
-                    if(shouldstop('w'))
-                    moveForward = false;
-                    break;
-
-                case 37: // left
-                case 65: // a
-                    if(shouldstop('a'))
-                        moveLeft = false;
-                    break;
-
-                case 40: // down
-                case 83: // s
-                    if(shouldstop('s'))
-                        moveBackward = false;
-                    break;
-
-                case 39: // right
-                case 68: // d
-                    if(shouldstop('d'))
-                        moveRight = false;break;
-
-                }
+                window.setTimeout(evaluation, 1000);
 
             };
 
