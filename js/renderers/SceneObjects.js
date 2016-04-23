@@ -1,9 +1,9 @@
 /**
  * Created by admin on 4/23/2016.
  */
-var mesh = null;
-function initMesh(scene) {
+function getMarsBase(scene) {
     var loader = new THREE.JSONLoader();
+    var mesh = null;
     loader.load('./models/station_concept_sizex15.json', function(geometry) {
         mesh = new THREE.Mesh(geometry);
         mesh.rotateX( Math.PI / 2);
