@@ -7,7 +7,8 @@ function getMarsBase(scene) {
     loader.load('./models/station_concept_sizex15.json', function(geometry) {
         mesh = new THREE.Mesh(geometry);
         mesh.rotateX( Math.PI / 2);
-        mesh.material.color.setHex( 0xffffff );
+        var colorMaterial =  new THREE.MeshLambertMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
+        mesh.material = colorMaterial;
         mesh.position.x = 350;
         mesh.position.y = -35;
         mesh.scale.x = 4;
