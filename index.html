@@ -96,6 +96,9 @@
         var element = document.body;
 
         var pointerlockchange = function (event) {
+            alert("pointer lock change");
+            alert("body"+JSON.stringify(document.body));
+            alert("webkitPointerLockElement"+JSON.stringify(document.webkitPointerLockElement));
             if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 
                 controlsEnabled = true;
