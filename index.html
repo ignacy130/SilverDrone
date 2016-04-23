@@ -56,7 +56,6 @@
 <script src="js/third-party/threejs/DeviceOrientationControls.js"></script>
 <script src="js/third-party/threejs/PointerLockControls.js"></script>
 <script src="js/third-party/threejs/OrbitControls.js"></script>
-<!--<script src="js/apis/speech.js"></script>-->
 
 <script src="js/renderers/Projector.js"></script>
 <script src="js/renderers/CanvasRenderer.js"></script>
@@ -73,8 +72,41 @@
 
 </div>
 
+<script type="x-shader/x-vertex" id="vertexShader">
+
+    varying vec3 vWorldPosition;
+
+    void main() {
+
+        vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+        vWorldPosition = worldPosition.xyz;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+    }
+
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentShader">
+
+    uniform vec3 topColor;
+    uniform vec3 bottomColor;
+    uniform float offset;
+    uniform float exponent;
+
+    varying vec3 vWorldPosition;
+
+    void main() {
+
+        float h = normalize( vWorldPosition + offset ).y;
+        gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+
+    }
+
+</script>
+
 <script>
-    var camera, scene, renderer;
+    var camera, scene, renderer, hemiLight, dirLight, mixers;
     var geometry, material, mesh;
     var controls;
 
@@ -183,8 +215,6 @@
     init();
     animate();
 
-
-
     var moveForward = false;
     var moveBackward = false;
     var moveLeft = false;
@@ -195,14 +225,73 @@
     var velocity = new THREE.Vector3();
 
     function initializeWorld() {
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+        camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 5000);
+        camera.position.set( 0, 0, 250 );
 
         scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xffb966, 0, 750);
+        scene.fog = new THREE.Fog(0xdbbee, 0, 1050);
+        scene.fog.color.setRGB( 0.9, 0.8, 0.8 );
+        // LIGHTS
 
-        var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
-        light.position.set(0.5, 1, 0.75);
-        scene.add(light);
+        hemiLight = new THREE.HemisphereLight( 0xff9933, 0x000000, 0.1 );
+        //hemiLight.color.setRGB(1, 0.5, 0.2);
+        hemiLight.position.set( 0, 500, 0 );
+        scene.add( hemiLight );
+
+        //
+
+        dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+        dirLight.color.setHSL( 0.1, 1, 0.95 );
+        dirLight.position.set( -1, 1.75, 1 );
+        dirLight.position.multiplyScalar( 50 );
+        scene.add( dirLight );
+
+        dirLight.castShadow = true;
+
+        dirLight.shadowMapWidth = 2048;
+        dirLight.shadowMapHeight = 2048;
+
+        var d = 50;
+
+        dirLight.shadowCameraLeft = -d;
+        dirLight.shadowCameraRight = d;
+        dirLight.shadowCameraTop = d;
+        dirLight.shadowCameraBottom = -d;
+
+        dirLight.shadowCameraFar = 3500;
+        dirLight.shadowBias = -0.0001;
+
+        // SKYDOME
+
+        var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+        var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+        var uniforms = {
+            topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
+            bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+            offset:		 { type: "f", value: 33 },
+            exponent:	 { type: "f", value: 0.6 }
+        };
+        uniforms.topColor.value.copy( hemiLight.color );
+
+        var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
+        var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+
+        var sky = new THREE.Mesh( skyGeo, skyMat );
+        scene.add( sky );
+
+        // RENDERER
+
+        renderer = new THREE.WebGLRenderer( { antialias: true } );
+        renderer.setClearColor( scene.fog.color );
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        renderer.gammaInput = true;
+        renderer.gammaOutput = true;
+
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.cullFace = THREE.CullFaceBack;
+
     }
 
     function  initializeControls() {
@@ -227,7 +316,7 @@
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
 
         renderer = new THREE.WebGLRenderer();
-        renderer.setClearColor(0xff6f1f);
+//        renderer.setClearColor(0xff6f1f);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
@@ -316,7 +405,6 @@
 
         window.addEventListener('resize', onWindowResize, false);
         onWindowResize();
-
     }
 
     function onWindowResize() {
@@ -380,12 +468,23 @@
             }
 
             renderer.render(scene, camera);
+
+//            renderer.setClearColor( scene.fog.color );
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+//            container.appendChild( renderer.domElement );
+
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
+
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.cullFace = THREE.CullFaceBack;
+
             effect.render(scene, camera);
         } catch(e) {
             //alert("catch="+JSON.stringify(e.message));
         }
     }
-
 </script>
 </body>
 

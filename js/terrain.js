@@ -51,11 +51,10 @@ var TerrainHelper = {
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set( 100, 100 );
-        console.log(texture);
-        var material = new THREE.MeshBasicMaterial({
-            map: texture,
-            overdraw: 0.5
-        });
+
+        var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
+        material.color.setHSL( 0.095, 1, 0.75 );
+        material.map = texture;
 
         var quality = 16,
             step = 1024 / quality;
@@ -67,6 +66,8 @@ var TerrainHelper = {
             geometry.vertices[i].y = data[(x * step) + (y * step) * 1024] * 2 - 128;
         }
         mesh = new THREE.Mesh(geometry, material);
+        mesh.receiveShadow = true;
+
         return mesh;
     }
 };
