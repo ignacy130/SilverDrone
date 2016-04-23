@@ -86,15 +86,19 @@
     var instructions = document.getElementById('instructions');
     var effects;
 
+    var controlsEnabled = false;
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-    //alert('Pointerlock'+JSON.stringify(havePointerLock))
+    alert('Pointerlock'+JSON.stringify(havePointerLock))
     if (havePointerLock) {
 
         var element = document.body;
 
         var pointerlockchange = function (event) {
+            alert("pointer lock change");
+            alert("body"+JSON.stringify(document.body));
+            alert("webkitPointerLockElement"+JSON.stringify(document.webkitPointerLockElement));
             if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 
                 controlsEnabled = true;
@@ -121,11 +125,11 @@
 
 
         var pointerlockerror = function (event) {
-
+            alert("pointer lck error" + JSON.stringify(event))
             instructions.style.display = '';
 
         };
-
+        pointerlockchange();
         // Hook pointer lock state change events
         document.addEventListener('pointerlockchange', pointerlockchange, false);
         document.addEventListener('mozpointerlockchange', pointerlockchange, false);
@@ -180,7 +184,7 @@
     init();
     animate();
 
-    var controlsEnabled = false;
+
 
     var moveForward = false;
     var moveBackward = false;
@@ -211,9 +215,9 @@
                 return;
             }
 
-            controls = new THREE.DeviceOrientationControls(camera, true);
-            controls.connect();
-            controls.update();
+            controls2 = new THREE.DeviceOrientationControls(camera, true);
+            controls2.connect();
+            controls2.update();
             element.addEventListener('click', fullscreen, false);
 
             window.removeEventListener('deviceorientation', setOrientationControls, true);
@@ -223,7 +227,7 @@
         scene.add(TerrainHelper.getTerrain());
 
         var onKeyDown = function (event) {
-            controlsEnabled = true;
+            //alert('keydown '+event.keyCode);
             switch (event.keyCode) {
 
                 case 38: // up
@@ -256,6 +260,7 @@
         };
 
         var onKeyUp = function (event) {
+            //alert('keyup '+event.keyCode);
 
 
             var kup = function(){
@@ -328,7 +333,9 @@
 
             var isOnObject = intersections.length > 0;
 
+            alert('animate contrls enabled');
             var time = performance.now();
+            alert('delta' + (time - prevTime) / 1000);
             var delta = (time - prevTime) / 1000;
 
             velocity.x -= velocity.x * 10.0 * delta;
@@ -362,6 +369,8 @@
             }
 
             prevTime = time;
+        } else {
+            alert(controlsEnabled);
         }
 
 
