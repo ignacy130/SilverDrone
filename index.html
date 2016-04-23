@@ -223,7 +223,7 @@
         scene.add(TerrainHelper.getTerrain());
 
         var onKeyDown = function (event) {
-            alert('keydown '+event.keyCode);
+            //alert('keydown '+event.keyCode);
             switch (event.keyCode) {
 
                 case 38: // up
@@ -256,7 +256,7 @@
         };
 
         var onKeyUp = function (event) {
-            alert('keyup '+event.keyCode);
+            //alert('keyup '+event.keyCode);
 
 
             var kup = function(){
@@ -329,7 +329,9 @@
 
             var isOnObject = intersections.length > 0;
 
+            alert('animate contrls enabled');
             var time = performance.now();
+            alert('delta' + (time - prevTime) / 1000);
             var delta = (time - prevTime) / 1000;
 
             velocity.x -= velocity.x * 10.0 * delta;
