@@ -124,7 +124,6 @@
 
     var hud = document.getElementById('hud');
     var hud2 = document.getElementById('hud2');
-    hud2.innerHTML = hud.innerHTML;
 
     if (havePointerLock) {
 
@@ -587,6 +586,8 @@
 
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.cullFace = THREE.CullFaceBack;
+
+            hud2.innerHTML = hud.innerHTML;
 
             effect.render(scene, camera);
         } catch(e) {
