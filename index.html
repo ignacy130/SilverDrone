@@ -515,11 +515,11 @@
                 velocity.z -= velocity.z * 10.0 * delta;
                 velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-                if (moveForward) velocity.z -= 600.0 * delta;
-                if (moveBackward) velocity.z += 600.0 * delta;
+                if (moveForward) velocity.z -= 1800.0 * delta;
+                if (moveBackward) velocity.z += 1800.0 * delta;
 
-                if (moveLeft) velocity.x -= 600.0 * delta;
-                if (moveRight) velocity.x += 600.0 * delta;
+                if (moveLeft) velocity.x -= 1800.0 * delta;
+                if (moveRight) velocity.x += 1800.0 * delta;
 
                 if (isOnObject === true) {
                     velocity.y = Math.max(0, velocity.y);
