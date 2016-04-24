@@ -21,38 +21,36 @@
 <script src="js/ImprovedNoise.js"></script>
 <script src="js/terrain.js"></script>
 <script src="js/renderers/SceneObjects.js"></script>
+<script src="js/renderers/TextRenderer.js"></script>
 
 <div id="dust-storm"></div>
 
 <div id="hud">
+    <div id="hud-red"></div>
     <div id="hud-basic">
-        <span>
-            O<sub>2</sub>
-             <span id="oxygen">
-                 &block;
-                 &block;
-                 &block;
-                 &block;
-                 &block;
-
-             </span>
-        </span>
-
-        <br/>
-        <br/>
-        20 &deg; C
-        <br/>
-        <br/>
+        <div id="o2">
+            <div id="temperature">54</div>
+            <img src="images/hud/temperature/HubTemperature_1.png" />
+        </div>
+    </div>
+    <div id="hud-info">
+        <img src="images/hud/signal/HubSignal_1.png"/>
         <span id="clock">
             24:12
         </span>
+        <span id="wind">
+            WIND:
+            <span id="wind-speed">0</span>
+            m/s
+        </span>
     </div>
-    <div id="hud-info">
 
+    <div id="hud-partner">
+        <img src="images/hud/conversation/HudChat_1.png"/>
     </div>
 </div>
 
-<div id="hud2">
+<div id="hud2" STYLE="left:50%!important;">
 
 </div>
 
@@ -60,9 +58,9 @@
 
 <div id="blocker">
 
-    <div id="instructions">
+    <div id="instructions" style="bottom: 15px;position: absolute;">
         <span style="font-size:40px">Click to play</span>
-        <br /> (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+        <br /> (W, A, S, D = Move, SPACE = Jump, Look around = Look around :))
     </div>
 
 </div>
@@ -107,6 +105,10 @@
     var audioLoader;
 
     var dustStorm = document.getElementById("dust-storm");
+    var windSpeedDisplay = document.getElementById("wind-speed");
+    var partnerHud = document.getElementById("hud-partner");
+    var hudRed = document.getElementById("hud-red");
+    var hudRedOpacity = 0;
 
     var objects = [];
 
@@ -116,6 +118,8 @@
     var instructions = document.getElementById('instructions');
     var effects;
 
+    var windSound;
+
     var controlsEnabled = false;
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -123,7 +127,6 @@
 
     var hud = document.getElementById('hud');
     var hud2 = document.getElementById('hud2');
-    hud2.innerHTML = hud.innerHTML;
 
     if (havePointerLock) {
 
@@ -167,8 +170,8 @@
 
         instructions.addEventListener('click', function (event) {
 
-            instructions.style.display = 'none';
-
+            //instructions.style.display = 'none';
+            blocker.style.display = 'none';
             // Ask the browser to lock the pointer
             element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 
@@ -200,11 +203,27 @@
             }
 
             //alert(JSON.stringify(document.body.childNodes));
+
+
             try{
                 document.body.childNodes[document.body.childNodes.length-1].requestFullscreen();
                 document.body.childNodes[document.body.childNodes.length-1].webkitRequestFullscreen();
+
             }catch(e)
             {}
+
+
+            soundInit();
+
+            //setTimeout(function(){ playSound('res/sounds/pierwszykomunikat.aac'); }, 5000);
+
+
+            //setTimeout(function(){ beginStorm();playWind(); }, 10000);
+            setTimeout(
+                    function(){ beginStorm();
+                    //playWind();
+            }, 5000);
+
 
         }, false);
 
@@ -227,15 +246,18 @@
     var velocity = new THREE.Vector3();
 
     function initializeWorld() {
-        camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 5000);
+        camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 6500);
         camera.position.set( 0, 10, 250 );
 
         scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xdbbee, 1000, 1500);
-        scene.fog.color.setRGB( 0.9, 0.8, 0.8 );
+        scene.fog = new THREE.Fog(0xdbbee, 1000, 3000);
+        scene.fog.color.setRGB( 135/255, 70/255, 50/255 );
+
+        initLabels();
+
         // LIGHTS
 
-        hemiLight = new THREE.HemisphereLight( 0xff9933, 0x000000, 0.1 );
+        hemiLight = new THREE.HemisphereLight( 0xff9933, 0xdd9933, 0.1 );
         //hemiLight.color.setRGB(1, 0.5, 0.2);
         hemiLight.position.set( 0, 500, 0 );
         scene.add( hemiLight );
@@ -269,7 +291,7 @@
         var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
         var uniforms = {
             topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
-            bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+            bottomColor: { type: "c", value: new THREE.Color( 0xcc6644 ) },
             offset:		 { type: "f", value: 33 },
             exponent:	 { type: "f", value: 0.6 }
         };
@@ -388,7 +410,7 @@
 
                 }
             }
-            setTimeout(function(){kup(); }, 1000);
+            setTimeout(function(){kup(); }, 100);
 
         };
 
@@ -397,15 +419,18 @@
     }
 
     function soundInit(){
+        audioLoader = new THREE.AudioLoader();
+    }
+
+    function playWind(){
         var listener = new THREE.AudioListener();
         camera.add( listener );
-        audioLoader = new THREE.AudioLoader();
-        var soundGlobal = new THREE.Audio( listener );
-        audioLoader.load( 'res/sounds/wind.mp3', function( buffer ) {
-            soundGlobal.setBuffer( buffer );
-            soundGlobal.setLoop(true);
-            soundGlobal.setVolume(0.5);
-            soundGlobal.play();
+        windSound = new THREE.Audio( listener );
+        audioLoader.load( 'res/sounds/wind.aac', function( buffer ) {
+            windSound.setBuffer( buffer );
+            windSound.setLoop(true);
+            windSound.setVolume(0.5);
+            windSound.play();
         });
     }
 
@@ -416,8 +441,8 @@
         var sound = new THREE.Audio( listener );
         audioLoader.load( path, function( buffer ) {
             sound.setBuffer( buffer );
-            sound.setLoop(true);
-            sound.setVolume(0.5);
+            sound.setLoop(false);
+            sound.setVolume(0.6);
             sound.play();
         });
     }
@@ -430,8 +455,6 @@
 
         initKeys();
 
-        soundInit();
-
         scene.add(TerrainHelper.getTerrain());
 
         getMarsBase(scene);
@@ -439,7 +462,8 @@
         window.addEventListener('resize', onWindowResize, false);
         onWindowResize();
 
-        beginStorm();
+
+        showPartner();
     }
 
     function onWindowResize() {
@@ -452,17 +476,44 @@
 
     }
 
+    function showPartner() {
+        partnerHud.style.opacity = 1;
+
+        var aWhile = 50; // ms
+        var blinkPartner = function() {
+
+            if(Math.random() < 0.1) {
+                partnerHud.style.opacity = 0.7;
+            }
+            else{
+                partnerHud.style.opacity = 1;
+            }
+
+            if(Number(partnerHud.style.opacity) > 0) {
+                setTimeout(blinkPartner, aWhile);
+            }
+        };
+        blinkPartner();
+    }
+
+    function hidePartner() {
+        partnerHud.style.opacity = 0;
+    }
+    
     function beginStorm() {
         var aWhile = 50; // ms
         dustStorm.style.zIndex = 10;
+        hudRed.style.opacity = 0.8;
         var increaseFog = function() {
 
             if(Number(dustStorm.style.opacity)<0.8) {
                 dustStorm.style.opacity = Number(dustStorm.style.opacity) + 0.01;
             }
 
+            windSpeedDisplay.innerHTML = parseFloat(Math.round(10*(Number(dustStorm.style.opacity) + 0.01) * 10 + Math.random()) / 10).toFixed(1);
+
             scene.fog.near = scene.fog.near-10;
-            scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
+            //scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
             if(scene.fog.near > 10) {
                 setTimeout(increaseFog, aWhile);
             }
@@ -483,16 +534,20 @@
                 dustStorm.style.opacity = Number(dustStorm.style.opacity) - 0.01;
             }
 
+            windSpeedDisplay.innerHTML = Math.abs(parseFloat(Math.round(10*(Number(dustStorm.style.opacity) - 0.01) * 10 - Math.random()) / 10).toFixed(1));
+
             scene.fog.near = scene.fog.near+10;
-            scene.fog.color.setRGB( scene.fog.color.r-0.0001, scene.fog.color.g+0.0025, scene.fog.color.b+0.0025 );
+            //scene.fog.color.setRGB( scene.fog.color.r-0.0001, scene.fog.color.g+0.0025, scene.fog.color.b+0.0025 );
             if(scene.fog.near < 1000) {
                 setTimeout(decreaseFog, aWhile);
             }
             else{
                 console.log("fog done");
+                hudRed.style.opacity = 0;
             }
         };
         decreaseFog();
+        windSound.stop();
     }
 
     function animate() {
@@ -515,11 +570,11 @@
                 velocity.z -= velocity.z * 10.0 * delta;
                 velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-                if (moveForward) velocity.z -= 600.0 * delta;
-                if (moveBackward) velocity.z += 600.0 * delta;
+                if (moveForward) velocity.z -= 1800.0 * delta;
+                if (moveBackward) velocity.z += 1800.0 * delta;
 
-                if (moveLeft) velocity.x -= 600.0 * delta;
-                if (moveRight) velocity.x += 600.0 * delta;
+                if (moveLeft) velocity.x -= 1800.0 * delta;
+                if (moveRight) velocity.x += 1800.0 * delta;
 
                 if (isOnObject === true) {
                     velocity.y = Math.max(0, velocity.y);
@@ -544,7 +599,7 @@
 
             }
 
-            renderer.render(scene, camera);
+            //renderer.render(scene, camera);
 
 //            renderer.setClearColor( scene.fog.color );
             renderer.setPixelRatio( window.devicePixelRatio );
@@ -556,6 +611,8 @@
 
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.cullFace = THREE.CullFaceBack;
+
+            hud2.innerHTML = hud.innerHTML;
 
             effect.render(scene, camera);
         } catch(e) {
