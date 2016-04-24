@@ -168,8 +168,8 @@
 
         instructions.addEventListener('click', function (event) {
 
-            instructions.style.display = 'none';
-
+            //instructions.style.display = 'none';
+            blocker.style.display = 'none';
             // Ask the browser to lock the pointer
             element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 
