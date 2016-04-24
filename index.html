@@ -401,7 +401,7 @@
         camera.add( listener );
         audioLoader = new THREE.AudioLoader();
         var soundGlobal = new THREE.Audio( listener );
-        audioLoader.load( 'res/sounds/wind.ogg', function( buffer ) {
+        audioLoader.load( 'res/sounds/wind.aac', function( buffer ) {
             soundGlobal.setBuffer( buffer );
             soundGlobal.setLoop(true);
             soundGlobal.setVolume(0.5);
