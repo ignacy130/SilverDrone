@@ -33,6 +33,8 @@ function getMarsBase(scene) {
             scene.add(m3);
             var m4 = m3.clone();
             m4.position.x=650;
+            m4.position.y = 0;
+
             scene.add(m4);
             var m5 = m3.clone();
             m5.position.x=800;
@@ -85,6 +87,10 @@ function getMarsBase(scene) {
     loadObject('./models/terenjson.json',
         new THREE.MeshLambertMaterial({color: 0xD2691E, side: THREE.DoubleSide}),
         -2000,-200,3000,5,5,5,Math.PI / 2,0,0);
+
+    loadObject('./models/swiecacakulka.json',
+        new THREE.MeshLambertMaterial({color: 0xffffff, side: THREE.DoubleSide}),
+        650,-80,995,20,20,20,0,0,0);
 
     for(var i=0;i<25;i++){
         loadObject('./models/kamien.json',
