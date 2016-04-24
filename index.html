@@ -228,7 +228,7 @@
         camera.position.set( 0, 10, 250 );
 
         scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xdbbee, 1000, 1050);
+        scene.fog = new THREE.Fog(0xdbbee, 1000, 1500);
         scene.fog.color.setRGB( 0.9, 0.8, 0.8 );
         // LIGHTS
 
@@ -462,9 +462,31 @@
             }
             else{
                 console.log("fog done");
+                endStorm();
             }
         };
         increaseFog();
+    }
+
+    function endStorm() {
+        var aWhile = 50; // ms
+        dustStorm.style.zIndex = 10;
+        var decreaseFog = function() {
+
+            if(Number(dustStorm.style.opacity)>0) {
+                dustStorm.style.opacity = Number(dustStorm.style.opacity) - 0.01;
+            }
+
+            scene.fog.near = scene.fog.near+10;
+            scene.fog.color.setRGB( scene.fog.color.r-0.0001, scene.fog.color.g+0.0025, scene.fog.color.b+0.0025 );
+            if(scene.fog.near < 1000) {
+                setTimeout(decreaseFog, aWhile);
+            }
+            else{
+                console.log("fog done");
+            }
+        };
+        decreaseFog();
     }
 
     function animate() {
