@@ -46,7 +46,7 @@ var TerrainHelper = {
 
     getTerrain: function () {
         /* terrain */
-        var data = this.generateHeight(1024*4, 1024*4);
+        var data = this.generateHeight(1024, 1024);
         var texture = new THREE.TextureLoader().load( "textures/patterns/mars_terrain.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
@@ -56,9 +56,9 @@ var TerrainHelper = {
         material.color.setHSL( 0.095, 1, 0.75 );
         material.map = texture;
 
-        var quality = 16,
+        var quality = 8,
             step = 1024 / quality;
-        var geometry = new THREE.PlaneGeometry(5000, 5000, quality - 1, quality - 1);
+        var geometry = new THREE.PlaneGeometry(4000, 4000, quality - 1, quality - 1);
         geometry.rotateX(-Math.PI / 2);
         for (var i = 0, l = geometry.vertices.length; i < l; i++) {
             var x = i % quality,
