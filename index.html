@@ -350,7 +350,10 @@
                     break;
 
                 case 32: // space
-                    if (canJump === true) velocity.y += 350;
+                    if (canJump === true) {
+                        velocity.y += 350;
+                        velocity.z -= 1050;
+                    }
                     canJump = false;
                     break;
 
@@ -385,7 +388,7 @@
 
                 }
             }
-            setTimeout(function(){kup(); }, 1000);
+            setTimeout(function(){kup(); }, 100);
 
         };
 
@@ -512,15 +515,14 @@
                 velocity.z -= velocity.z * 10.0 * delta;
                 velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-                if (moveForward) velocity.z -= 400.0 * delta;
-                if (moveBackward) velocity.z += 400.0 * delta;
+                if (moveForward) velocity.z -= 1800.0 * delta;
+                if (moveBackward) velocity.z += 1800.0 * delta;
 
-                if (moveLeft) velocity.x -= 400.0 * delta;
-                if (moveRight) velocity.x += 400.0 * delta;
+                if (moveLeft) velocity.x -= 1800.0 * delta;
+                if (moveRight) velocity.x += 1800.0 * delta;
 
                 if (isOnObject === true) {
                     velocity.y = Math.max(0, velocity.y);
-
                     canJump = true;
                 }
 
@@ -542,7 +544,7 @@
 
             }
 
-            renderer.render(scene, camera);
+            //renderer.render(scene, camera);
 
 //            renderer.setClearColor( scene.fog.color );
             renderer.setPixelRatio( window.devicePixelRatio );

@@ -58,7 +58,7 @@ var TerrainHelper = {
 
         var quality = 16,
             step = 1024 / quality;
-        var geometry = new THREE.PlaneGeometry(2000, 2000, quality - 1, quality - 1);
+        var geometry = new THREE.PlaneGeometry(4000, 4000, quality - 1, quality - 1);
         geometry.rotateX(-Math.PI / 2);
         for (var i = 0, l = geometry.vertices.length; i < l; i++) {
             var x = i % quality,
