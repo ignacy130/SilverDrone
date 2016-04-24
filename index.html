@@ -45,6 +45,10 @@
     <div id="hud-info">
 
     </div>
+
+    <div id="hud-partner">
+        <img src="images/hud/conversation/HudChat_1.png"/>
+    </div>
 </div>
 
 <div id="hud2">
@@ -103,6 +107,7 @@
 
     var dustStorm = document.getElementById("dust-storm");
     var windSpeedDisplay = document.getElementById("wind-speed");
+    var partnerHud = document.getElementById("hud-partner");
 
     var objects = [];
 
@@ -436,6 +441,7 @@
         onWindowResize();
 
         beginStorm();
+        showPartner();
     }
 
     function onWindowResize() {
@@ -448,6 +454,30 @@
 
     }
 
+    function showPartner() {
+        partnerHud.style.opacity = 1;
+
+        var aWhile = 50; // ms
+        var blinkPartner = function() {
+
+            if(Math.random() < 0.1) {
+                partnerHud.style.opacity = 0.7;
+            }
+            else{
+                partnerHud.style.opacity = 1;
+            }
+
+            if(Number(partnerHud.style.opacity) > 0) {
+                setTimeout(blinkPartner, aWhile);
+            }
+        };
+        blinkPartner();
+    }
+
+    function hidePartner() {
+        partnerHud.style.opacity = 0;
+    }
+    
     function beginStorm() {
         var aWhile = 50; // ms
         dustStorm.style.zIndex = 10;
