@@ -92,6 +92,13 @@ body {
 #hud-basic #o2 img{
     width: 15vw;
     height: 15vw;
+
+    position: absolute;
+    image-size: 50%;
+    top: 6vw;
+    width: 15vw;
+    height: 15vw;
+    left: 6vw;
 }
 
 #hud-info{
