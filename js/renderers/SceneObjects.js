@@ -70,4 +70,10 @@ function getMarsBase(scene) {
         new THREE.MeshLambertMaterial({color: 0xD2691E, side: THREE.DoubleSide}),
         -2000,-200,3000,5,5,5,Math.PI / 2,0,0);
 
+    for(var i=0;i<25;i++){
+        loadObject('./models/kamien.json',
+            new THREE.MeshLambertMaterial({color: 0xD2691E, side: THREE.DoubleSide}),
+            Math.random()*1000-500,-46,Math.random()*1000-500,Math.random()*5+1,Math.random()*5+1,Math.random()*5+1,2*Math.PI*Math.random(),2*Math.PI*Math.random(),2*Math.PI*Math.random());
+    }
+
 }
