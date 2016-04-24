@@ -215,10 +215,14 @@
 
             soundInit();
 
-            setTimeout(function(){ playSound('res/sounds/pierwszykomunikat.aac'); }, 5000);
+            //setTimeout(function(){ playSound('res/sounds/pierwszykomunikat.aac'); }, 5000);
 
 
-            setTimeout(function(){ beginStorm();playWind(); }, 10000);
+            //setTimeout(function(){ beginStorm();playWind(); }, 10000);
+            setTimeout(
+                    function(){ beginStorm();
+                    //playWind();
+            }, 5000);
 
 
         }, false);
