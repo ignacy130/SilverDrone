@@ -118,6 +118,8 @@
     var instructions = document.getElementById('instructions');
     var effects;
 
+    var windSound;
+
     var controlsEnabled = false;
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -201,11 +203,23 @@
             }
 
             //alert(JSON.stringify(document.body.childNodes));
+
+
             try{
                 document.body.childNodes[document.body.childNodes.length-1].requestFullscreen();
                 document.body.childNodes[document.body.childNodes.length-1].webkitRequestFullscreen();
+
             }catch(e)
             {}
+
+
+            soundInit();
+
+            setTimeout(function(){ playSound('res/sounds/pierwszykomunikat.ogg'); }, 5000);
+
+
+            setTimeout(function(){ beginStorm();playWind(); }, 10000);
+
 
         }, false);
 
@@ -401,15 +415,18 @@
     }
 
     function soundInit(){
+        audioLoader = new THREE.AudioLoader();
+    }
+
+    function playWind(){
         var listener = new THREE.AudioListener();
         camera.add( listener );
-        audioLoader = new THREE.AudioLoader();
-        var soundGlobal = new THREE.Audio( listener );
+        windSound = new THREE.Audio( listener );
         audioLoader.load( 'res/sounds/wind.aac', function( buffer ) {
-            soundGlobal.setBuffer( buffer );
-            soundGlobal.setLoop(true);
-            soundGlobal.setVolume(0.5);
-            soundGlobal.play();
+            windSound.setBuffer( buffer );
+            windSound.setLoop(true);
+            windSound.setVolume(0.5);
+            windSound.play();
         });
     }
 
@@ -420,8 +437,8 @@
         var sound = new THREE.Audio( listener );
         audioLoader.load( path, function( buffer ) {
             sound.setBuffer( buffer );
-            sound.setLoop(true);
-            sound.setVolume(0.5);
+            sound.setLoop(false);
+            sound.setVolume(0.6);
             sound.play();
         });
     }
@@ -434,8 +451,6 @@
 
         initKeys();
 
-        soundInit();
-
         scene.add(TerrainHelper.getTerrain());
 
         getMarsBase(scene);
@@ -443,7 +458,7 @@
         window.addEventListener('resize', onWindowResize, false);
         onWindowResize();
 
-        beginStorm();
+
         showPartner();
     }
 
@@ -528,6 +543,7 @@
             }
         };
         decreaseFog();
+        windSound.stop();
     }
 
     function animate() {
