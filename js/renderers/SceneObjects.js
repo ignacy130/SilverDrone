@@ -62,7 +62,7 @@ function getMarsBase(scene) {
 
 
 
-    // loadBases();
+    loadBases();
 
     var customMaterial = new THREE.ShaderMaterial(
         {
