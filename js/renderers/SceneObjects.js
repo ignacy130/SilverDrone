@@ -61,6 +61,6 @@ function getMarsBase(scene) {
                 150,3000,150,1,1,1,Math.PI / 2,0,0);
 
     loadObject('./models/terenjson.json',
-        new THREE.MeshLambertMaterial({color: 0xFF4500, side: THREE.DoubleSide}),
+        new THREE.MeshLambertMaterial({color: 0xD2691E, side: THREE.DoubleSide}),
         -800,-50,-800,1,1,1,Math.PI / 2,0,0);
 }
