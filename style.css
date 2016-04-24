@@ -54,11 +54,22 @@ body {
 }
 
 #hud-basic{
-    font-size: 2em;
-    width: 200px;
+    font-size: 1.5vw;
+    width: 10vw;
     padding:2%;
     background: rgba(150,0,0,.3);
     border-bottom: 1px solid #fff;
+}
+
+#hud-info{
+    font-size: 1.5vw;
+    width: 10vw;
+    padding: 2%;
+    background: rgba(150,0,0,.3);
+    border-bottom: 1px solid #fff;
+    position: absolute;
+    right: 50%;
+    top: 0;
 }
 
 #dust-storm{
