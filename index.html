@@ -26,12 +26,20 @@
 
 <div id="hud">
     <div id="hud-basic">
-        <div id="o2-image">
+        <div id="o2">
+            <div id="temperature">54</div>
             <img src="images/hud/temperature/HubTemperature_1.png"/>
         </div>
 
         <span id="clock">
             24:12
+        </span>
+        <br/>
+        <br/>
+        <span id="wind">
+            WIND:
+            <span id="wind-speed">0</span>
+            m/s
         </span>
     </div>
     <div id="hud-info">
@@ -94,6 +102,7 @@
     var audioLoader;
 
     var dustStorm = document.getElementById("dust-storm");
+    var windSpeedDisplay = document.getElementById("wind-speed");
 
     var objects = [];
 
@@ -448,6 +457,9 @@
                 dustStorm.style.opacity = Number(dustStorm.style.opacity) + 0.01;
             }
 
+            windSpeedDisplay.innerHTML = parseFloat(Math.round(10*(Number(dustStorm.style.opacity) + 0.01) * 10 + Math.random()) / 10).toFixed(1);
+
+
             scene.fog.near = scene.fog.near-10;
             scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
             if(scene.fog.near > 10) {
@@ -469,6 +481,8 @@
             if(Number(dustStorm.style.opacity)>0) {
                 dustStorm.style.opacity = Number(dustStorm.style.opacity) - 0.01;
             }
+
+            windSpeedDisplay.innerHTML = Math.abs(parseFloat(Math.round(10*(Number(dustStorm.style.opacity) - 0.01) * 10 - Math.random()) / 10).toFixed(1));
 
             scene.fog.near = scene.fog.near+10;
             scene.fog.color.setRGB( scene.fog.color.r-0.0001, scene.fog.color.g+0.0025, scene.fog.color.b+0.0025 );
