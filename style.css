@@ -1,14 +1,23 @@
+@font-face {
+    font-family: 'Stellar';
+    src:
+        local('Stellar'),
+        local('Stellar'),
+        url('Stellar-Regular.otf');
+}
+
 html,
 body {
     width: 100%;
     height: 100%;
+    font-family: 'Stellar';
 }
 
 body {
     background-color: #ffffff;
     margin: 0;
     overflow: hidden;
-    font-family: arial;
+    font-family: 'Stellar';
     background: linear-gradient(to bottom, #ff6f1f 0%, #d6430d 100%);
 }
 
@@ -51,14 +60,20 @@ body {
     height:100%;
     color: #fff;
     z-index: 9000;
+    color: #33feff;
 }
 
 #hud-basic{
     font-size: 1.5vw;
     width: 10vw;
-    padding:2%;
-    background: rgba(150,0,0,.3);
-    border-bottom: 1px solid #fff;
+    padding: 1%;
+    border-bottom: 1px solid #33feff;
+    text-align: center;
+}
+
+#hud-basic #o2 img{
+    width: 10vw;
+    height: 10vw;
 }
 
 #hud-info{
@@ -74,9 +89,35 @@ body {
 
 #dust-storm{
     background: #ffb966;
-    opacity: 0;
+    opacity: 0.2;
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: -10;
+}
+
+#o2 #temperature{
+    position: absolute;
+    top: 5vw;
+    left: 4vw;
+    font-size: 1.6em;
+}
+
+#clock{
+    font-size: 1.6em;
+}
+
+#hud-partner{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 10vw;
+    height: 10vw;
+    padding: 1%;
+    opacity: 0;
+}
+
+#hud-partner img{
+    width: 10vw;
+    height: 10vw;
 }

@@ -26,29 +26,28 @@
 
 <div id="hud">
     <div id="hud-basic">
-        <span>
-            O<sub>2</sub>
-             <span id="oxygen">
-                 &block;
-                 &block;
-                 &block;
-                 &block;
-                 &block;
+        <div id="o2">
+            <div id="temperature">54</div>
+            <img src="images/hud/temperature/HubTemperature_1.png"/>
+        </div>
 
-             </span>
-        </span>
-
-        <br/>
-        <br/>
-        20 &deg; C
-        <br/>
-        <br/>
         <span id="clock">
             24:12
+        </span>
+        <br/>
+        <br/>
+        <span id="wind">
+            WIND:
+            <span id="wind-speed">0</span>
+            m/s
         </span>
     </div>
     <div id="hud-info">
 
+    </div>
+
+    <div id="hud-partner">
+        <img src="images/hud/conversation/HudChat_1.png"/>
     </div>
 </div>
 
@@ -107,6 +106,8 @@
     var audioLoader;
 
     var dustStorm = document.getElementById("dust-storm");
+    var windSpeedDisplay = document.getElementById("wind-speed");
+    var partnerHud = document.getElementById("hud-partner");
 
     var objects = [];
 
@@ -231,11 +232,11 @@
         camera.position.set( 0, 10, 250 );
 
         scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0xdbbee, 1000, 1500);
-        scene.fog.color.setRGB( 0.9, 0.8, 0.8 );
+        scene.fog = new THREE.Fog(0xdbbee, 1000, 3000);
+        scene.fog.color.setRGB( 135/255, 70/255, 50/255 );
         // LIGHTS
 
-        hemiLight = new THREE.HemisphereLight( 0xff9933, 0xff9933, 0.1 );
+        hemiLight = new THREE.HemisphereLight( 0xff9933, 0xdd9933, 0.1 );
         //hemiLight.color.setRGB(1, 0.5, 0.2);
         hemiLight.position.set( 0, 500, 0 );
         scene.add( hemiLight );
@@ -269,7 +270,7 @@
         var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
         var uniforms = {
             topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
-            bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+            bottomColor: { type: "c", value: new THREE.Color( 0xcc6644 ) },
             offset:		 { type: "f", value: 33 },
             exponent:	 { type: "f", value: 0.6 }
         };
@@ -440,6 +441,7 @@
         onWindowResize();
 
         beginStorm();
+        showPartner();
     }
 
     function onWindowResize() {
@@ -452,6 +454,30 @@
 
     }
 
+    function showPartner() {
+        partnerHud.style.opacity = 1;
+
+        var aWhile = 50; // ms
+        var blinkPartner = function() {
+
+            if(Math.random() < 0.1) {
+                partnerHud.style.opacity = 0.7;
+            }
+            else{
+                partnerHud.style.opacity = 1;
+            }
+
+            if(Number(partnerHud.style.opacity) > 0) {
+                setTimeout(blinkPartner, aWhile);
+            }
+        };
+        blinkPartner();
+    }
+
+    function hidePartner() {
+        partnerHud.style.opacity = 0;
+    }
+    
     function beginStorm() {
         var aWhile = 50; // ms
         dustStorm.style.zIndex = 10;
@@ -461,8 +487,11 @@
                 dustStorm.style.opacity = Number(dustStorm.style.opacity) + 0.01;
             }
 
+            windSpeedDisplay.innerHTML = parseFloat(Math.round(10*(Number(dustStorm.style.opacity) + 0.01) * 10 + Math.random()) / 10).toFixed(1);
+
+
             scene.fog.near = scene.fog.near-10;
-            scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
+            //scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
             if(scene.fog.near > 10) {
                 setTimeout(increaseFog, aWhile);
             }
@@ -483,8 +512,10 @@
                 dustStorm.style.opacity = Number(dustStorm.style.opacity) - 0.01;
             }
 
+            windSpeedDisplay.innerHTML = Math.abs(parseFloat(Math.round(10*(Number(dustStorm.style.opacity) - 0.01) * 10 - Math.random()) / 10).toFixed(1));
+
             scene.fog.near = scene.fog.near+10;
-            scene.fog.color.setRGB( scene.fog.color.r-0.0001, scene.fog.color.g+0.0025, scene.fog.color.b+0.0025 );
+            //scene.fog.color.setRGB( scene.fog.color.r-0.0001, scene.fog.color.g+0.0025, scene.fog.color.b+0.0025 );
             if(scene.fog.near < 1000) {
                 setTimeout(decreaseFog, aWhile);
             }
