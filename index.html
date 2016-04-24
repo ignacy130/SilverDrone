@@ -21,6 +21,7 @@
 <script src="js/ImprovedNoise.js"></script>
 <script src="js/terrain.js"></script>
 <script src="js/renderers/SceneObjects.js"></script>
+<script src="js/renderers/TextRenderer.js"></script>
 
 <div id="dust-storm"></div>
 
@@ -59,9 +60,9 @@
 
 <div id="blocker">
 
-    <div id="instructions">
+    <div id="instructions" style="bottom: 15px;position: absolute;">
         <span style="font-size:40px">Click to play</span>
-        <br /> (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+        <br /> (W, A, S, D = Move, SPACE = Jump, Look around = Look around :))
     </div>
 
 </div>
@@ -233,6 +234,9 @@
         scene = new THREE.Scene();
         scene.fog = new THREE.Fog(0xdbbee, 1000, 3000);
         scene.fog.color.setRGB( 135/255, 70/255, 50/255 );
+
+        initLabels();
+
         // LIGHTS
 
         hemiLight = new THREE.HemisphereLight( 0xff9933, 0xdd9933, 0.1 );
