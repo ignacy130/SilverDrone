@@ -17,11 +17,11 @@ function getMarsBase(scene) {
             mesh.scale.y = 4;
             mesh.scale.z = 4;
             scene.add(mesh);
-
+    
             var m2 = mesh.clone();
             m2.position.z = 150;
             scene.add(m2);
-
+    
             var m3 = mesh.clone();
             m3.position.z = 750;
             m3.position.x = 500;
@@ -62,7 +62,7 @@ function getMarsBase(scene) {
 
 
 
-    loadBases();
+    // loadBases();
 
     var customMaterial = new THREE.ShaderMaterial(
         {
