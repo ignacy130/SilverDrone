@@ -26,6 +26,7 @@
 <div id="dust-storm"></div>
 
 <div id="hud">
+    <div id="hud-red"></div>
     <div id="hud-basic">
         <div id="o2">
             <div id="temperature">54</div>
@@ -107,6 +108,8 @@
     var dustStorm = document.getElementById("dust-storm");
     var windSpeedDisplay = document.getElementById("wind-speed");
     var partnerHud = document.getElementById("hud-partner");
+    var hudRed = document.getElementById("hud-red");
+    var hudRedOpacity = 0;
 
     var objects = [];
 
@@ -482,6 +485,7 @@
     function beginStorm() {
         var aWhile = 50; // ms
         dustStorm.style.zIndex = 10;
+        hudRed.style.opacity = 0.8;
         var increaseFog = function() {
 
             if(Number(dustStorm.style.opacity)<0.8) {
@@ -489,7 +493,6 @@
             }
 
             windSpeedDisplay.innerHTML = parseFloat(Math.round(10*(Number(dustStorm.style.opacity) + 0.01) * 10 + Math.random()) / 10).toFixed(1);
-
 
             scene.fog.near = scene.fog.near-10;
             //scene.fog.color.setRGB( scene.fog.color.r+0.0001, scene.fog.color.g-0.0025, scene.fog.color.b-0.0025 );
@@ -522,6 +525,7 @@
             }
             else{
                 console.log("fog done");
+                hudRed.style.opacity = 0;
             }
         };
         decreaseFog();
